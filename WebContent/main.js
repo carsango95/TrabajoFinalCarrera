@@ -68,9 +68,9 @@ function Ball(x){
     }.bind(this)
     
     this.draw = function(){
-        this.y = this.y - 5 //velocidad pelota
-        ctx.drawImage(this.imagen, this.x, this.y, this.width, this.height)
-    }
+        this.y = this.y - 2 //velocidad desplazamiento pelota
+        ctx.drawImage(this.imagen, this.x, this.y, this.width, this.height) }
+    
 }
 
 
@@ -87,39 +87,56 @@ function update(){
     gk.draw()
     generateBalls()
     drawBalls()
-    checkCollition()
+    checkBall()
+    removeBall()
+
 }
 
+//BIEN
 function start(){
     interval = setInterval(update,1000/60)
 }
 
+//BIEN
 function gameOver(){
     clearInterval(interval)
-    ctx.font = "50px Avenir"
+    /*ctx.font = "50px Avenir"  //para la version 3.0, marcador final
     ctx.fillStyle = "white"
-    ctx.fillText('GAME OVER',100,100)
-    //ctx.fillText(balls.length, 226,150)
+    ctx.fillText('GAME OVER',350,100)
+    ctx.fillText(balls.length, 488,150)*/ 
 }
 //aux functions
 
+//BIEN
 function generateBalls(){
-    if(frames % 64 === 0){
-        const x = Math.floor(Math.random() * 16)
-        balls.push(new Ball(x * 64))
+    if(frames % 32 === 0){ //velocidad aparicion pelota
+        const x = Math.floor((Math.random()*(371)+280) ) //pelotas solo entre los palos
+        balls.push(new Ball(x))
     }
 }
 
+//BIEN
 function drawBalls(){
     balls.forEach(function(ball){
         ball.draw()
     })
 }
 
-function checkCollition(){
+
+//BIEN
+function checkBall(){
+    balls.forEach(ball=>{
+        if(ball.y < 340 && ball.y > 0){ //si la pelota llega a la linea de fondo, pierdes
+            gameOver()
+        }
+    })
+}
+
+//
+function removeBall(){
     balls.forEach(ball=>{
         if(gk.checkIfTouch(ball)){
-            gameOver()
+        ball.y = -50 //si el portero toca la pelota, esta desaparece
         }
     })
 }
@@ -130,11 +147,11 @@ function checkCollition(){
 addEventListener('keydown', function(e){
     if(e.keyCode === 37){
         if(gk.x <= 0) return
-        gk.x -= 64;
+        gk.x -= 40;
     }
     if(e.keyCode === 39){
-        if(gk.x >= canvas.width - 64) return
-        gk.x += 64;
+        if(gk.x >= canvas.width - 40) return
+        gk.x += 40;
     }
     
 })
