@@ -8,6 +8,8 @@ var background = "images/background.jpeg"
 var oblak = "images/oblak.png"
 var ball = "images/pelota.png"
 var balls = []
+var contador = 0 //variable que lleva la cuenta de balones parados
+var vidas = 3 //variable que cuenta las vidas que le quedan al jugador
 
 //CONSTRUCTORS 
 
@@ -100,10 +102,10 @@ function start(){
 //BIEN
 function gameOver(){
     clearInterval(interval)
-    /*ctx.font = "50px Avenir"  //para la version 3.0, marcador final
+    ctx.font = "50px Avenir"  //para la version 3.0, marcador final
     ctx.fillStyle = "white"
     ctx.fillText('GAME OVER',350,100)
-    ctx.fillText(balls.length, 488,150)*/ 
+    ctx.fillText(contador, 488,150)
 }
 //aux functions
 
@@ -126,17 +128,22 @@ function drawBalls(){
 //BIEN
 function checkBall(){
     balls.forEach(ball=>{
-        if(ball.y < 340 && ball.y > 0){ //si la pelota llega a la linea de fondo, pierdes
-            gameOver()
+        if(ball.y < 340 && ball.y > 0){ //si la pelota llega a la linea de fondo, pierdes una vida
+            if(vidas == 0){
+                gameOver()
+            }
+            vidas--
+            ball.y = -50
         }
     })
 }
 
-//
+//BIEN
 function removeBall(){
     balls.forEach(ball=>{
         if(gk.checkIfTouch(ball)){
         ball.y = -50 //si el portero toca la pelota, esta desaparece
+        contador++
         }
     })
 }
